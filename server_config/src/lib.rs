@@ -1,0 +1,10 @@
+pub const HOST: &str = "127.0.0.1";
+
+pub const HTTPSERVER_PORT: u16 = 21000;
+// you'll have to change the openssl.cnf when making the cert, if you want to change things above
+// oh and, PEM
+pub const KEY_FILE_PATH: &str = "./cert/localhost.key";
+pub const CERT_FILE_PATH: &str = "./cert/localhost.crt";
+
+pub const GAMESERVER_PORT: u16 = 23301;
+pub const BUFFER_SIZE: usize = 1024;

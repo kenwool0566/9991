@@ -1,4 +1,4 @@
-use actix_web::{get, post, HttpResponse, HttpRequest, Responder};
+use actix_web::{HttpRequest, HttpResponse, Responder, get, post};
 use serde_json::json;
 
 #[get("/patch/{id}/version")]

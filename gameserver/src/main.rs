@@ -1,10 +1,13 @@
 use tokio::net::TcpListener;
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::io::AsyncReadExt;
 use server_config::{HOST, GAMESERVER_PORT, BUFFER_SIZE};
 
+mod cmd;
+mod handler;
 mod packet;
-use packet::ClientPacket;
-use packet::ServerPacket;
+mod util;
+
+type DynError = Box<dyn std::error::Error + Send + Sync>;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
@@ -21,8 +24,9 @@ async fn main() {
             match socket.read(&mut buffer).await {
                 Ok(0) => return,
                 Ok(n) => {
-                    println!("{:?}", ClientPacket::decode(&buffer[..n]));
-                    socket.write_all(&buffer[..n]).await.unwrap();
+                    if let Err(e) = handler::dispatch_command(&mut socket, &buffer[..n]).await {
+                        eprintln!("{}", e);
+                    }
                 }
                 Err(e) => eprintln!("lmao: {}", e),
             }

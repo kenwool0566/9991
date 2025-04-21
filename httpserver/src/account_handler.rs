@@ -1,7 +1,7 @@
-use actix_web::{get, post, HttpResponse, Responder};
+use crate::crypto::encrypt_sdk;
+use actix_web::{HttpResponse, Responder, get, post};
 use serde_json::json;
-use crate::crypto::encrypt;
-use server_config::{HOST, GAMESERVER_PORT};
+use server_config::{GAMESERVER_PORT, HOST};
 
 // anything 7331 is uid!
 
@@ -37,7 +37,9 @@ pub async fn sdk_init() -> impl Responder {
             "isDownloadService": true
         }
     });
-    HttpResponse::Ok().content_type("application/json").body(encrypt(data))
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(encrypt_sdk(data))
 }
 
 #[post("/login/autologin")]
@@ -65,7 +67,9 @@ pub async fn login_autologin() -> impl Responder {
             "accountTags": ""
         }
     });
-    HttpResponse::Ok().content_type("application/json").body(encrypt(data))
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(encrypt_sdk(data))
 }
 
 #[post("/login/mail")]
@@ -93,7 +97,9 @@ pub async fn login_mail() -> impl Responder {
             "accountTags": ""
         }
     });
-    HttpResponse::Ok().content_type("application/json").body(encrypt(data))
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(encrypt_sdk(data))
 }
 
 #[post("/uidAccount/bindList")]
@@ -107,7 +113,9 @@ pub async fn uid_account_bind_list() -> impl Responder {
             "accountType": 10
         }]
     });
-    HttpResponse::Ok().content_type("application/json").body(encrypt(data))
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(encrypt_sdk(data))
 }
 
 #[post("/login/verify")]
@@ -135,7 +143,9 @@ pub async fn login_verify() -> impl Responder {
             "refreshToken": "null"
         }
     });
-    HttpResponse::Ok().content_type("application/json").body(encrypt(data))
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(encrypt_sdk(data))
 }
 
 #[get("/login.jsp")]

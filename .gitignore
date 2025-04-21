@@ -1,4 +1,6 @@
 /target
 *.crt
 *.key
+*.proto
 Cargo.lock
+/backup

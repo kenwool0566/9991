@@ -1,4 +1,4 @@
-use flate2::{read::GzEncoder, Compression};
+use flate2::{Compression, read::GzEncoder};
 use std::io::Read;
 
 // this is just a 1:1 from pseudocode i suppose
@@ -31,7 +31,7 @@ fn swap_each_two_bytes(bytes: &mut Vec<u8>) {
     }
 }
 
-pub fn encrypt(json: serde_json::Value) -> Vec<u8> {
+pub fn encrypt_sdk(json: serde_json::Value) -> Vec<u8> {
     let mut bytes = serde_json::to_vec(&json).unwrap();
     swap_each_two_bytes(&mut bytes);
     let mut gz = GzEncoder::new(&*bytes, Compression::default()); // default = level 6

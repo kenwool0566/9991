@@ -1,6 +1,6 @@
 use actix_web::{App, HttpServer};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
-use server_config::{KEY_FILE_PATH, CERT_FILE_PATH, HOST, HTTPSERVER_PORT};
+use server_config::{CERT_FILE_PATH, HOST, HTTPSERVER_PORT, KEY_FILE_PATH};
 
 mod crypto;
 
@@ -11,13 +11,14 @@ mod index_handler;
 #[actix_web::main]
 async fn main() {
     let mut ssl = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
-    ssl.set_private_key_file(KEY_FILE_PATH, SslFiletype::PEM).unwrap();
+    ssl.set_private_key_file(KEY_FILE_PATH, SslFiletype::PEM)
+        .unwrap();
     ssl.set_certificate_chain_file(CERT_FILE_PATH).unwrap();
 
     let addr = format!("{}:{}", HOST, HTTPSERVER_PORT);
     println!("https://{} is listening :3", &addr);
 
-    HttpServer::new(|| 
+    HttpServer::new(|| {
         App::new()
             .service(account_handler::sdk_init)
             .service(account_handler::login_autologin)
@@ -35,7 +36,7 @@ async fn main() {
             .service(game_handler::get_notice)
             .service(index_handler::home)
             .service(index_handler::favicon)
-    )
+    })
     .bind_openssl(&addr, ssl)
     .unwrap()
     .run()

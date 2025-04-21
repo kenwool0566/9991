@@ -1,4 +1,4 @@
-use byteorder::{ByteOrder, BE};
+use byteorder::{BE, ByteOrder};
 
 #[derive(Debug)]
 pub struct ServerPacket {
@@ -20,7 +20,7 @@ pub struct ClientPacket {
 impl ServerPacket {
     const PACKET_HEADER: usize = 10;
 
-    pub fn encode(&self) -> Box<[u8]> {
+    pub fn encode(&self) -> Vec<u8> {
         let total_len = Self::PACKET_HEADER + self.data.len();
         let mut buffer = vec![0u8; total_len];
 
@@ -31,7 +31,7 @@ impl ServerPacket {
         buffer[9] = self.down_tag;
         (&mut buffer[Self::PACKET_HEADER..]).copy_from_slice(&self.data);
 
-        buffer.into_boxed_slice()
+        buffer
     }
 }
 
@@ -44,7 +44,7 @@ impl ClientPacket {
         }
 
         let packet_size = BE::read_u32(&buffer[0..4]) as usize;
-        
+
         if buffer.len() != packet_size + 4 {
             return None;
         }

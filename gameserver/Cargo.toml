@@ -7,3 +7,5 @@ edition = "2024"
 byteorder.workspace = true
 tokio.workspace = true
 server_config.workspace = true
+sonettobuf.workspace = true
+bytes.workspace = true

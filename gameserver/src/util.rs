@@ -10,7 +10,7 @@ pub struct ByteWriting;
 #[allow(dead_code)]
 impl ByteWriting {
     const VAR_0_1: usize = 256;
-    
+
     pub fn read_string(arg_12_0: &[u8], arg_12_1: usize) -> Option<(usize, String)> {
         if arg_12_1 + 1 >= arg_12_0.len() {
             return None;
@@ -42,7 +42,7 @@ pub async fn send_raw_buffer(
     socket: &mut TcpStream,
     cmd_id: CmdId,
     data: Vec<u8>,
-    result_code: u16,
+    result_code: i16,
 ) -> Result<(), DynError> {
     let cmd_id = cmd_id as i16;
     let server_packet = ServerPacket {

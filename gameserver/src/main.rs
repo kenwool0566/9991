@@ -1,6 +1,8 @@
-use tokio::net::TcpListener;
+use byteorder::{BE, ByteOrder};
+use bytes::BytesMut;
+use server_config::{BUFFER_SIZE, GAMESERVER_PORT, HOST};
 use tokio::io::AsyncReadExt;
-use server_config::{HOST, GAMESERVER_PORT, BUFFER_SIZE};
+use tokio::net::TcpListener;
 
 mod cmd;
 mod handler;
@@ -20,15 +22,42 @@ async fn main() {
         println!("connected: {:?}", client);
 
         tokio::spawn(async move {
-            let mut buffer = [0u8; BUFFER_SIZE];
-            match socket.read(&mut buffer).await {
-                Ok(0) => return,
-                Ok(n) => {
-                    if let Err(e) = handler::dispatch_command(&mut socket, &buffer[..n]).await {
-                        eprintln!("{}", e);
+            // this shit is horrible
+            let mut temp_buffer = BytesMut::with_capacity(BUFFER_SIZE);
+            let mut temp_buffer2 = BytesMut::with_capacity(BUFFER_SIZE * 2);
+
+            loop {
+                match socket.read_buf(&mut temp_buffer).await {
+                    Ok(0) => return,
+                    Ok(_) => {
+                        temp_buffer2.extend_from_slice(&temp_buffer);
+                        temp_buffer.clear();
+
+                        while temp_buffer2.len() >= 4 {
+                            let size = BE::read_u32(&temp_buffer2[0..4]) as usize + 4;
+
+                            if temp_buffer2.len() < size {
+                                break;
+                            }
+
+                            let buffer = temp_buffer2.split_to(size);
+                            // println!("buffer (complete): {:?}", &buffer);
+                            // println!("remaining temp_buffer2: {:?}", &temp_buffer2);
+                            // println!("calculated size: {}", size);
+                            // println!("actual size: {}", buffer.len());
+
+                            if let Err(e) =
+                                handler::dispatch_command(&mut socket, &buffer[..]).await
+                            {
+                                eprintln!("{}", e);
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        eprintln!("read error: {}", e);
+                        return;
                     }
                 }
-                Err(e) => eprintln!("lmao: {}", e),
             }
         });
     }

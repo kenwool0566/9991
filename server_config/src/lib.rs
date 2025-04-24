@@ -7,4 +7,4 @@ pub const KEY_FILE_PATH: &str = "./cert/localhost.key";
 pub const CERT_FILE_PATH: &str = "./cert/localhost.crt";
 
 pub const GAMESERVER_PORT: u16 = 23301;
-pub const BUFFER_SIZE: usize = 2048;
+pub const BUFFER_SIZE: usize = 1024;

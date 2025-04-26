@@ -8,3 +8,5 @@ pub const CERT_FILE_PATH: &str = "./cert/localhost.crt";
 
 pub const GAMESERVER_PORT: u16 = 23301;
 pub const BUFFER_SIZE: usize = 1024;
+
+pub const USER_ID: u64 = 7331;

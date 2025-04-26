@@ -1,9 +1,7 @@
 use crate::crypto::encrypt_sdk;
 use actix_web::{HttpResponse, Responder, get, post};
 use serde_json::json;
-use server_config::{GAMESERVER_PORT, HOST};
-
-// anything 7331 is uid!
+use server_config::{GAMESERVER_PORT, HOST, USER_ID};
 
 #[post("/sdk/init")]
 pub async fn sdk_init() -> impl Responder {
@@ -51,7 +49,7 @@ pub async fn login_autologin() -> impl Responder {
             "token": "kenwool0566@notareal.email",
             "expiresIn": 0,
             "refreshToken": "null",
-            "userId": 7331,
+            "userId": USER_ID,
             "accountType": 10,
             "registrationAccountType": 10,
             "account": "kenwool0566@notareal.email",
@@ -81,7 +79,7 @@ pub async fn login_mail() -> impl Responder {
             "token": "kenwool0566@notareal.email",
             "expiresIn": 0,
             "refreshToken": "null",
-            "userId": 7331,
+            "userId": USER_ID,
             "accountType": 10,
             "registrationAccountType": 10,
             "account": "kenwool0566@notareal.email",
@@ -108,7 +106,7 @@ pub async fn uid_account_bind_list() -> impl Responder {
         "code": 200,
         "msg": "success",
         "data": [{
-            "userId": 7331,
+            "userId": USER_ID,
             "account": "kenwool0566@notareal.email",
             "accountType": 10
         }]
@@ -126,7 +124,7 @@ pub async fn login_verify() -> impl Responder {
         "data": {
             "userInfo": {
                 "channelId": 200,
-                "userId": "200_7331",
+                "userId": format!("200_{}", USER_ID),
                 "realNameStatus": false,
                 "age": 0,
                 "adult": false,
@@ -156,7 +154,7 @@ pub async fn login_jsp() -> impl Responder {
         "isAdmin": false,
         "resultCode": 0,
         "sessionId": "null",
-        "userName": "200_200_7331",
+        "userName": format!("200_200_{}", USER_ID),
         "zoneInfo": {
             "default": true,
             "id": 4,

@@ -1,4 +1,5 @@
 use byteorder::{BE, ByteOrder};
+use sonettobuf::prost::Message;
 
 #[derive(Debug)]
 pub struct ServerPacket {
@@ -9,6 +10,7 @@ pub struct ServerPacket {
     pub data: Vec<u8>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct ClientPacket {
     pub sequence: i32,
@@ -62,5 +64,9 @@ impl ClientPacket {
             up_tag,
             data,
         })
+    }
+
+    pub fn decode_message<T: Message + Default>(&self) -> T {
+        T::decode(&*self.data).unwrap_or_default()
     }
 }

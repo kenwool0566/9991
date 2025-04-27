@@ -1,38 +1,9 @@
 use crate::DynError;
 use crate::packet::ClientPacket;
-use crate::util::{DAY_MS, YEAR_MS, send_message, send_raw_buffer, time_ms_u64};
-use byteorder::{BE, ByteOrder};
+use crate::util::{DAY_MS, YEAR_MS, send_message, time_ms_u64};
 use server_config::USER_ID;
 use sonettobuf::{CmdId, GetPlayerInfoReply, HeroSimpleInfo, OpenInfo, PlayerInfo};
 use tokio::net::TcpStream;
-
-pub async fn on_login(
-    cmd_id: CmdId,
-    socket: &mut TcpStream,
-    _req: ClientPacket,
-) -> Result<(), DynError> {
-    // let (account_info_len, account_info) = ByteWriting::read_string(&req.data, 0).unwrap();
-    // let (account_token_len, account_token) =
-    //     ByteWriting::read_string(&req.data, account_info_len + 2).unwrap();
-    // let connect_way = &req.data[account_info_len + account_token_len + 4];
-    // println!(
-    //     "new login: info={}, token={}, connect_way={}",
-    //     account_info, account_token, connect_way
-    // );
-
-    // let user_id = account_info
-    //     .split('_')
-    //     .last()
-    //     .unwrap()
-    //     .parse::<u64>()
-    //     .unwrap();
-
-    let mut data = vec![0u8; 10];
-    BE::write_u64(&mut data[2..10], USER_ID);
-    send_raw_buffer(socket, cmd_id, data, 0).await?;
-
-    Ok(())
-}
 
 pub async fn on_get_player_info(
     cmd_id: CmdId,
@@ -84,14 +55,5 @@ pub async fn on_get_player_info(
     };
 
     send_message(socket, cmd_id, data, 0).await?;
-    Ok(())
-}
-
-pub async fn on_lost(
-    cmd_id: CmdId,
-    socket: &mut TcpStream,
-    _req: ClientPacket,
-) -> Result<(), DynError> {
-    send_raw_buffer(socket, cmd_id, vec![0x01], 0).await?;
     Ok(())
 }

@@ -28,12 +28,14 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
             guide::on_get_guide_info(CmdId::GetGuideInfoRequestCmd, socket, req).await?
         }
 
+        // ===== login =====
+        Ok(CmdId::LoginRequestCmd) => login::on_login(CmdId::LoginRequestCmd, socket, req).await?,
+        Ok(CmdId::ReconnectRequestCmd) => login::on_reconnect(CmdId::ReconnectRequestCmd, socket, req).await?,
+
         // ===== player =====
-        Ok(CmdId::LoginCmd) => player::on_login(CmdId::LoginCmd, socket, req).await?,
         Ok(CmdId::GetPlayerInfoRequestCmd) => {
             player::on_get_player_info(CmdId::GetPlayerInfoRequestCmd, socket, req).await?
         }
-        Ok(CmdId::LostCmd) => player::on_lost(CmdId::LostCmd, socket, req).await?,
 
         // ===== stat =====
         Ok(CmdId::UpdateClientStatBaseInfoRequestCmd) => {

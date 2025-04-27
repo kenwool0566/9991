@@ -4013,10 +4013,16 @@ pub struct MinorLimitLoginTimePush {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum CmdId {
-    LoginCmd = 1,
-    LostCmd = 3,
-    ForceLogoutCmd = 4,
-    GetLostCmdRespResponseStartTag = 5,
+    /// / === framework.network.socket.system_cmd ===
+    /// / Original name: Login = 1;
+    LoginRequestCmd = 1,
+    /// / Original name: GetLostCmdRespRequest = 3;
+    ReconnectRequestCmd = 3,
+    /// / Original name: ForceLogoutResponse = 4;
+    ForceLogoutPushCmd = 4,
+    /// / Original name: GetLostCmdRespResponseStartTag = 5;
+    GetReconnectStartTagRequestCmd = 5,
+    /// / === modules.setting.module_cmd ===
     GetAchievementInfoRequestCmd = -12977,
     UpdateAchievementPushCmd = -23802,
     ShowAchievementRequestCmd = 4196,
@@ -4975,10 +4981,10 @@ impl CmdId {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::LoginCmd => "LoginCmd",
-            Self::LostCmd => "LostCmd",
-            Self::ForceLogoutCmd => "ForceLogoutCmd",
-            Self::GetLostCmdRespResponseStartTag => "GetLostCmdRespResponseStartTag",
+            Self::LoginRequestCmd => "LoginRequestCmd",
+            Self::ReconnectRequestCmd => "ReconnectRequestCmd",
+            Self::ForceLogoutPushCmd => "ForceLogoutPushCmd",
+            Self::GetReconnectStartTagRequestCmd => "GetReconnectStartTagRequestCmd",
             Self::GetAchievementInfoRequestCmd => "GetAchievementInfoRequestCmd",
             Self::UpdateAchievementPushCmd => "UpdateAchievementPushCmd",
             Self::ShowAchievementRequestCmd => "ShowAchievementRequestCmd",
@@ -6074,11 +6080,11 @@ impl CmdId {
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "LoginCmd" => Some(Self::LoginCmd),
-            "LostCmd" => Some(Self::LostCmd),
-            "ForceLogoutCmd" => Some(Self::ForceLogoutCmd),
-            "GetLostCmdRespResponseStartTag" => {
-                Some(Self::GetLostCmdRespResponseStartTag)
+            "LoginRequestCmd" => Some(Self::LoginRequestCmd),
+            "ReconnectRequestCmd" => Some(Self::ReconnectRequestCmd),
+            "ForceLogoutPushCmd" => Some(Self::ForceLogoutPushCmd),
+            "GetReconnectStartTagRequestCmd" => {
+                Some(Self::GetReconnectStartTagRequestCmd)
             }
             "GetAchievementInfoRequestCmd" => Some(Self::GetAchievementInfoRequestCmd),
             "UpdateAchievementPushCmd" => Some(Self::UpdateAchievementPushCmd),

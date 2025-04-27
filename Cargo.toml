@@ -2,6 +2,13 @@
 resolver = "3"
 members = ["gameserver", "httpserver", "server_config", "sonettobuf"]
 
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "ISC"
+authors = ["Niangzhi's Tavern"]
+repository = "https://github.com/NTavern/sonetto-server"
+
 [workspace.dependencies]
 server_config = { path = "server_config/" }
 

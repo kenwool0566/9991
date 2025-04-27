@@ -10,38 +10,42 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
         None => return Err("failed decoding client packet".into()),
     };
 
-    let cmd_id = TryInto::<CmdId>::try_into(req.cmd_id as i32);
+    let cmd_id = match TryInto::<CmdId>::try_into(req.cmd_id as i32) {
+        Ok(v) => v,
+        Err(_) => return Err(format!("unknown cmd_id: {}", req.cmd_id).into()),
+    };
+
     println!("got cmd: {:?}", cmd_id);
 
     match cmd_id {
         // ===== common =====
-        Ok(CmdId::GetServerTimeRequestCmd) => {
+        CmdId::GetServerTimeRequestCmd => {
             common::on_get_server_time(CmdId::GetServerTimeRequestCmd, socket, req).await?
         }
 
         // ===== currency =====
-        Ok(CmdId::GetCurrencyListRequestCmd) => {
+        CmdId::GetCurrencyListRequestCmd => {
             currency::on_get_currency_list(CmdId::GetCurrencyListRequestCmd, socket, req).await?
         }
 
         // ===== guide =====
-        Ok(CmdId::GetGuideInfoRequestCmd) => {
+        CmdId::GetGuideInfoRequestCmd => {
             guide::on_get_guide_info(CmdId::GetGuideInfoRequestCmd, socket, req).await?
         }
 
         // ===== login =====
-        Ok(CmdId::LoginRequestCmd) => login::on_login(CmdId::LoginRequestCmd, socket, req).await?,
-        Ok(CmdId::ReconnectRequestCmd) => {
+        CmdId::LoginRequestCmd => login::on_login(CmdId::LoginRequestCmd, socket, req).await?,
+        CmdId::ReconnectRequestCmd => {
             login::on_reconnect(CmdId::ReconnectRequestCmd, socket, req).await?
         }
 
         // ===== player =====
-        Ok(CmdId::GetPlayerInfoRequestCmd) => {
+        CmdId::GetPlayerInfoRequestCmd => {
             player::on_get_player_info(CmdId::GetPlayerInfoRequestCmd, socket, req).await?
         }
 
         // ===== stat =====
-        Ok(CmdId::UpdateClientStatBaseInfoRequestCmd) => {
+        CmdId::UpdateClientStatBaseInfoRequestCmd => {
             stat::on_update_client_stat_base_info(
                 CmdId::UpdateClientStatBaseInfoRequestCmd,
                 socket,
@@ -49,12 +53,10 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
             )
             .await?
         }
-        Ok(CmdId::ClientStatBaseInfoRequestCmd) => {
+        CmdId::ClientStatBaseInfoRequestCmd => {
             stat::on_client_stat_base_info(CmdId::ClientStatBaseInfoRequestCmd, socket, req).await?
         }
 
-        // ===== error handling =====
-        Err(_) => return Err(format!("unknown cmd_id: {}", req.cmd_id).into()),
         v => return Err(format!("unhandled: {:?}", v).into()),
     };
 

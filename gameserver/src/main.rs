@@ -41,7 +41,7 @@ async fn main() {
                             }
 
                             let buffer = temp_buffer2.split_to(size);
-                            // println!("buffer (complete): {:?}", &buffer);
+                            println!("buffer (complete): {:?}", &buffer);
                             // println!("remaining temp_buffer2: {:?}", &temp_buffer2);
                             // println!("calculated size: {}", size);
                             // println!("actual size: {}", buffer.len());

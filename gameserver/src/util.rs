@@ -21,6 +21,7 @@ pub async fn send_raw_buffer(
     data: Vec<u8>,
     result_code: i16,
 ) -> Result<(), DynError> {
+    println!("handling cmd: {:?}", cmd_id);
     let cmd_id = cmd_id as i16;
     let server_packet = ServerPacket {
         cmd_id,
@@ -40,15 +41,7 @@ pub async fn send_message<T: Message + Default>(
     result_code: i16,
 ) -> Result<(), DynError> {
     let data = data.encode_to_vec();
-    let cmd_id = cmd_id as i16;
-    let server_packet = ServerPacket {
-        cmd_id,
-        result_code,
-        data,
-        down_tag: 0,
-        up_tag: 0,
-    };
-    socket.write_all(&server_packet.encode()).await?;
+    send_raw_buffer(socket, cmd_id, data, result_code).await?;
     Ok(())
 }
 

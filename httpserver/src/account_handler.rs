@@ -9,7 +9,7 @@ pub async fn sdk_init() -> impl Responder {
         "code": 200,
         "msg": "success",
         "data": {
-            "loginAccountTypes": [1, 5, 10, 11, 12, 13, 14],
+            "loginAccountTypes": [1, 5, 10, 11, 12, 13, 14, 15],
             "userCenterItems": [
                 { "type": 1, "labTitle": "账号管理" },
                 { "type": 2, "labTitle": "客服" },
@@ -32,7 +32,14 @@ pub async fn sdk_init() -> impl Responder {
                 "openRealNameWindow": false,
                 "forceRealNameAuth": false
             },
-            "isDownloadService": true
+            "isDownloadService": true,
+            "isShowStopServiceBaffle": false,
+            "isIgnoreFileMissing": true,
+            "isOpenCMP": false,
+            "showButtons": {
+                "Notice": true
+            },
+            "isUnsupportChangeVolume": false,
         }
     });
     HttpResponse::Ok()
@@ -46,13 +53,13 @@ pub async fn login_autologin() -> impl Responder {
         "code": 200,
         "msg": "success",
         "data": {
-            "token": "kenwool0566@notareal.email",
-            "expiresIn": 0,
-            "refreshToken": "null",
+            "token": "de7620137059cae84f2383565186f779200",
+            "expiresIn": 583050,
+            "refreshToken": "97cb7be15a73e5d63983be4ad19275b5200",
             "userId": USER_ID,
-            "accountType": 10,
-            "registrationAccountType": 10,
-            "account": "kenwool0566@notareal.email",
+            "accountType": 15,
+            "registrationAccountType": 15,
+            "account": "kenwool",
             "realNameInfo": {
                 "needRealName": false,
                 "realNameStatus": true,
@@ -60,7 +67,7 @@ pub async fn login_autologin() -> impl Responder {
                 "adult": true
             },
             "needActivate": false,
-            "cipherMark": true,
+            "cipherMark": false,
             "firstJoin": false,
             "accountTags": ""
         }
@@ -76,13 +83,13 @@ pub async fn login_mail() -> impl Responder {
         "code": 200,
         "msg": "success",
         "data": {
-            "token": "kenwool0566@notareal.email",
-            "expiresIn": 0,
-            "refreshToken": "null",
+            "token": "de7620137059cae84f2383565186f779200",
+            "expiresIn": 583050,
+            "refreshToken": "97cb7be15a73e5d63983be4ad19275b5200",
             "userId": USER_ID,
-            "accountType": 10,
-            "registrationAccountType": 10,
-            "account": "kenwool0566@notareal.email",
+            "accountType": 15,
+            "registrationAccountType": 15,
+            "account": "kenwool",
             "realNameInfo": {
                 "needRealName": false,
                 "realNameStatus": true,
@@ -90,9 +97,23 @@ pub async fn login_mail() -> impl Responder {
                 "adult": true
             },
             "needActivate": false,
-            "cipherMark": true,
+            "cipherMark": false,
             "firstJoin": false,
             "accountTags": ""
+        }
+    });
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .body(encrypt_sdk(data))
+}
+
+#[post("/login/config")]
+pub async fn login_config() -> impl Responder {
+    let data = json!({
+        "code": 200,
+        "msg": "success",
+        "data": {
+            "afWhitelist": false
         }
     });
     HttpResponse::Ok()
@@ -107,8 +128,8 @@ pub async fn uid_account_bind_list() -> impl Responder {
         "msg": "success",
         "data": [{
             "userId": USER_ID,
-            "account": "kenwool0566@notareal.email",
-            "accountType": 10
+            "account": "kenwool",
+            "accountType": 15
         }]
     });
     HttpResponse::Ok()
@@ -130,15 +151,15 @@ pub async fn login_verify() -> impl Responder {
                 "adult": false,
                 "firstJoin": false,
                 "accountTags": "",
-                "bindAccountTypeList": [10],
-                "firstJoinTime": "2023-11-03 01:02:53",
-                "registerTime": "2023-11-03 01:02:50",
+                "bindAccountTypeList": ["steam"],
+                "firstJoinTime": "2024-04-12 19:40:54",
+                "registerTime": "2024-04-12 19:39:07",
                 "isPayAccount": false
             },
-            "sessionId": "null",
-            "token": "null",
-            "expiresIn": 0,
-            "refreshToken": "null"
+            "sessionId": "534f8be7e3744135a951a25f828c89bc",
+            "token": "de7620137059cae84f2383565186f779200",
+            "expiresIn": 604800,
+            "refreshToken": "97cb7be15a73e5d63983be4ad19275b5200"
         }
     });
     HttpResponse::Ok()
@@ -153,7 +174,7 @@ pub async fn login_jsp() -> impl Responder {
         "areaId": 4,
         "isAdmin": false,
         "resultCode": 0,
-        "sessionId": "null",
+        "sessionId": "b381a905-4ba9-4639-ae78-caf67859f16a",
         "userName": format!("200_200_{}", USER_ID),
         "zoneInfo": {
             "default": true,
@@ -173,8 +194,8 @@ pub async fn loadzone_jsp() -> impl Responder {
         "resultCode": 0,
         "userInfos": [{
             "id": 4,
-            "level": 9,
-            "name": "kenwool0566@notareal.email",
+            "level": 1,
+            "name": "kenwool",
             "portrait": 170001
         }],
         "zoneInfos": [{
@@ -191,7 +212,7 @@ pub async fn loadzone_jsp() -> impl Responder {
 pub async fn startgame_jsp() -> impl Responder {
     HttpResponse::Ok().json(json!({
         "bakIp": HOST,
-        "bakPid": 2,
+        "bakPid": 1,
         "bakPort": GAMESERVER_PORT,
         "ip": HOST,
         "isAdmin": false,
@@ -199,6 +220,6 @@ pub async fn startgame_jsp() -> impl Responder {
         "port": GAMESERVER_PORT,
         "resultCode": 0,
         "state": 1,
-        "tips": "Everything is temporary. Have fun!"
+        "tips": "Maintenance time: 05:00 - 10:00, Apr.24th (UTC-5). For more info, please check Notice or our official X page."
     }))
 }

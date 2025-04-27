@@ -10,9 +10,10 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
         None => return Err("failed decoding client packet".into()),
     };
 
-    println!("got cmd: {}", req.cmd_id);
+    let cmd_id = TryInto::<CmdId>::try_into(req.cmd_id as i32);
+    println!("got cmd: {:?}", cmd_id);
 
-    match TryInto::<CmdId>::try_into(req.cmd_id as i32) {
+    match cmd_id {
         // ===== common =====
         Ok(CmdId::GetServerTimeRequestCmd) => {
             common::on_get_server_time(CmdId::GetServerTimeRequestCmd, socket, req).await?
@@ -30,7 +31,9 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
 
         // ===== login =====
         Ok(CmdId::LoginRequestCmd) => login::on_login(CmdId::LoginRequestCmd, socket, req).await?,
-        Ok(CmdId::ReconnectRequestCmd) => login::on_reconnect(CmdId::ReconnectRequestCmd, socket, req).await?,
+        Ok(CmdId::ReconnectRequestCmd) => {
+            login::on_reconnect(CmdId::ReconnectRequestCmd, socket, req).await?
+        }
 
         // ===== player =====
         Ok(CmdId::GetPlayerInfoRequestCmd) => {
@@ -52,7 +55,7 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
 
         // ===== error handling =====
         Err(_) => return Err(format!("unknown cmd_id: {}", req.cmd_id).into()),
-        _ => return Err(format!("unhandled: {}", req.cmd_id).into()),
+        v => return Err(format!("unhandled: {:?}", v).into()),
     };
 
     Ok(())

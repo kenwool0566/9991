@@ -1,5 +1,5 @@
 [package]
-name = "server_config"
+name = "common"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -7,3 +7,5 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+tracing-subscriber.workspace = true
+ansi_term.workspace = true

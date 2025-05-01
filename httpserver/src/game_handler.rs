@@ -1,6 +1,6 @@
 use actix_web::{HttpRequest, HttpResponse, Responder, get, post};
 use serde_json::json;
-// use server_config::{HOST, HTTPSERVER_PORT};
+// use common::{HOST, HTTPSERVER_PORT};
 
 #[get("/patch/60001/version")]
 pub async fn patch_version(req: HttpRequest) -> impl Responder {

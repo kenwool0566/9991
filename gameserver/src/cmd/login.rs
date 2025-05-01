@@ -2,7 +2,7 @@ use crate::DynError;
 use crate::packet::ClientPacket;
 use crate::util::send_raw_buffer;
 use byteorder::{BE, ByteOrder};
-use server_config::USER_ID;
+use common::USER_ID;
 use sonettobuf::CmdId;
 use tokio::net::TcpStream;
 

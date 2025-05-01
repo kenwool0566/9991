@@ -1,7 +1,7 @@
 use crate::crypto::encrypt_sdk;
 use actix_web::{HttpResponse, Responder, get, post};
+use common::{GAMESERVER_PORT, HOST, USER_ID};
 use serde_json::json;
-use server_config::{GAMESERVER_PORT, HOST, USER_ID};
 
 #[post("/sdk/init")]
 pub async fn sdk_init() -> impl Responder {

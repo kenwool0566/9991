@@ -9,6 +9,7 @@ repository.workspace = true
 [dependencies]
 byteorder.workspace = true
 tokio.workspace = true
-server_config.workspace = true
+common.workspace = true
 sonettobuf.workspace = true
 bytes.workspace = true
+tracing.workspace = true

@@ -40,17 +40,21 @@ impl ServerPacket {
 impl ClientPacket {
     const PACKET_HEADER: usize = 11;
 
-    pub fn decode(buffer: &[u8]) -> Option<Self> {
+    pub fn decode(buffer: &[u8]) -> Result<Self, String> {
         if buffer.len() < Self::PACKET_HEADER {
-            eprintln!("buf < header");
-            return None;
+            return Err(format!(
+                "Client Packet Length < Header Length. Buffer: {:?}",
+                buffer
+            ));
         }
 
         let packet_size = BE::read_u32(&buffer[0..4]) as usize;
 
         if buffer.len() != packet_size + 4 {
-            eprintln!("buf != size+4");
-            return None;
+            return Err(format!(
+                "Client Packet Length =/= Calculated Length. Buffer: {:?}",
+                buffer
+            ));
         }
 
         let sequence = BE::read_i32(&buffer[4..8]);
@@ -58,7 +62,7 @@ impl ClientPacket {
         let up_tag = buffer[10];
         let data = buffer[Self::PACKET_HEADER..].to_vec();
 
-        Some(Self {
+        Ok(Self {
             sequence,
             cmd_id,
             up_tag,
@@ -67,6 +71,17 @@ impl ClientPacket {
     }
 
     pub fn decode_message<T: Message + Default>(&self) -> T {
-        T::decode(&*self.data).unwrap_or_default()
+        let data = &*self.data;
+        match T::decode(data) {
+            Ok(v) => v,
+            Err(e) => {
+                tracing::warn!(
+                    "Failed decoding message: {}, Buffer: {:?}, Fallbacking.",
+                    e,
+                    data
+                );
+                T::default()
+            }
+        }
     }
 }

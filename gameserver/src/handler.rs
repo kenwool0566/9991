@@ -5,17 +5,14 @@ use sonettobuf::CmdId;
 use tokio::net::TcpStream;
 
 pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), DynError> {
-    let req = match ClientPacket::decode(req) {
-        Some(pk) => pk,
-        None => return Err("failed decoding client packet".into()),
-    };
+    let req = ClientPacket::decode(req)?;
 
     let cmd_id = match TryInto::<CmdId>::try_into(req.cmd_id as i32) {
         Ok(v) => v,
-        Err(_) => return Err(format!("unknown cmd_id: {}", req.cmd_id).into()),
+        Err(_) => return Err(format!("Unregistered Cmd: {}", req.cmd_id).into()),
     };
 
-    println!("got cmd: {:?}", cmd_id);
+    tracing::debug!("Received Cmd: {:?}", cmd_id);
 
     match cmd_id {
         // ===== common =====
@@ -57,7 +54,7 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
             stat::on_client_stat_base_info(CmdId::ClientStatBaseInfoRequestCmd, socket, req).await?
         }
 
-        v => return Err(format!("unhandled: {:?}", v).into()),
+        v => return Err(format!("Unhandled Cmd: {:?}", v).into()),
     };
 
     Ok(())

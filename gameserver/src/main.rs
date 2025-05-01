@@ -1,6 +1,6 @@
 use byteorder::{BE, ByteOrder};
 use bytes::BytesMut;
-use server_config::{BUFFER_SIZE, GAMESERVER_PORT, HOST};
+use common::{BUFFER_SIZE, GAMESERVER_PORT, HOST, init_tracing};
 use tokio::io::AsyncReadExt;
 use tokio::net::TcpListener;
 
@@ -15,11 +15,13 @@ type DynError = Box<dyn std::error::Error + Send + Sync>;
 async fn main() {
     let addr = format!("{}:{}", HOST, GAMESERVER_PORT);
     let listener = TcpListener::bind(&addr).await.unwrap();
-    println!("tcp {} is listening :3", &addr);
+
+    init_tracing();
+    tracing::info!(r#"starting service: "tcp-{0}", listening on: {0}"#, &addr);
 
     loop {
         let (mut socket, client) = listener.accept().await.unwrap();
-        println!("connected: {:?}", client);
+        tracing::info!("New Client: {:?}", client);
 
         tokio::spawn(async move {
             // this shit is horrible
@@ -41,7 +43,7 @@ async fn main() {
                             }
 
                             let buffer = temp_buffer2.split_to(size);
-                            println!("buffer (complete): {:?}", &buffer);
+                            tracing::debug!("Received Buffer: {:?}", &buffer);
                             // println!("remaining temp_buffer2: {:?}", &temp_buffer2);
                             // println!("calculated size: {}", size);
                             // println!("actual size: {}", buffer.len());
@@ -49,12 +51,12 @@ async fn main() {
                             if let Err(e) =
                                 handler::dispatch_command(&mut socket, &buffer[..]).await
                             {
-                                eprintln!("{}", e);
+                                tracing::error!("Dispatch Command Error: {}", e);
                             }
                         }
                     }
                     Err(e) => {
-                        eprintln!("read error: {}", e);
+                        tracing::error!("Socket Read Error: {}", e);
                         return;
                     }
                 }

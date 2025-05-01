@@ -10,3 +10,10 @@ pub const GAMESERVER_PORT: u16 = 23301;
 pub const BUFFER_SIZE: usize = 1024;
 
 pub const USER_ID: u64 = 7331;
+
+pub fn init_tracing() {
+    #[cfg(target_os = "windows")]
+    ansi_term::enable_ansi_support().unwrap();
+
+    tracing_subscriber::fmt().init();
+}

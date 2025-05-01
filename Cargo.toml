@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["gameserver", "httpserver", "server_config", "sonettobuf"]
+members = ["gameserver", "httpserver", "common", "sonettobuf"]
 
 [workspace.package]
 version = "0.1.0"
@@ -10,7 +10,7 @@ authors = ["Niangzi's Tavern"]
 repository = "https://github.com/NTavern/sonetto-server"
 
 [workspace.dependencies]
-server_config = { path = "server_config/" }
+common = { path = "common/" }
 
 actix-web = { version = "4.10.2", features = ["openssl"] }
 # remove vendored if you already have openssl-dev installed
@@ -27,3 +27,7 @@ prost = "0.13.5"
 prost-types = "0.13.5"
 prost-build = "0.13.5"
 sonettobuf = { path = "sonettobuf/" }
+
+ansi_term = "0.12.1"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"

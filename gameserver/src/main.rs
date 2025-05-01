@@ -43,7 +43,7 @@ async fn main() {
                             }
 
                             let buffer = temp_buffer2.split_to(size);
-                            tracing::debug!("Received Buffer: {:?}", &buffer);
+                            tracing::info!("Received Buffer: {:?}", &buffer);
                             // println!("remaining temp_buffer2: {:?}", &temp_buffer2);
                             // println!("calculated size: {}", size);
                             // println!("actual size: {}", buffer.len());

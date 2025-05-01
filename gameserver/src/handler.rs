@@ -12,7 +12,7 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
         Err(_) => return Err(format!("Unregistered Cmd: {}", req.cmd_id).into()),
     };
 
-    tracing::debug!("Received Cmd: {:?}", cmd_id);
+    tracing::info!("Received Cmd: {:?}", cmd_id);
 
     match cmd_id {
         // ===== common =====

@@ -21,7 +21,7 @@ pub async fn send_raw_buffer(
     data: Vec<u8>,
     result_code: i16,
 ) -> Result<(), DynError> {
-    tracing::debug!("Handling Cmd: {:?}", cmd_id);
+    tracing::info!("Sending Cmd: {:?}", cmd_id);
     let cmd_id = cmd_id as i16;
     let server_packet = ServerPacket {
         cmd_id,

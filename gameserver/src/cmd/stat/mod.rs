@@ -1,0 +1,5 @@
+mod client_stat_base_info;
+mod update_client_stat_base_info;
+
+pub use client_stat_base_info::on_client_stat_base_info;
+pub use update_client_stat_base_info::on_update_client_stat_base_info;

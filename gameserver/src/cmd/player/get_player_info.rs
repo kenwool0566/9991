@@ -7,7 +7,7 @@ use sonettobuf::{CmdId, GetPlayerInfoReply, HeroSimpleInfo, PlayerInfo};
 use tokio::net::TcpStream;
 
 // placeholder for now
-// should probably make em all their own functions and call in on_get_player_info
+// check the usage to see progress on "actual impls"
 macro_rules! multi_send_test {
     ( $socket:expr; $($cmd:ident $data:expr;)* ) => {
         $(
@@ -64,14 +64,17 @@ pub async fn on_get_player_info(
 
     send_message(socket, cmd_id, data, 0).await?;
 
+    // todo: make handlers for these!
+    // also update protos... FUCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk
+    // anyways do update protos before continuing!!
     multi_send_test![
         socket;
-        GetSimplePropertyRequestCmd Vec::new();
-        GetClothInfoRequestCmd Vec::new();
-        HeroInfoListRequestCmd Vec::new();
-        GetHeroGroupCommonListRequestCmd Vec::new();
-        GetHeroGroupListRequestCmd Vec::new();
-        GetItemListRequestCmd Vec::new();
+        // GetSimplePropertyRequestCmd Vec::new();
+        // GetClothInfoRequestCmd Vec::new();
+        // HeroInfoListRequestCmd Vec::new();
+        // GetHeroGroupCommonListRequestCmd Vec::new();
+        // GetHeroGroupListRequestCmd Vec::new();
+        // GetItemListRequestCmd Vec::new();
         GetDungeonRequestCmd Vec::new();
         ReconnectFightRequestCmd Vec::new();
         GetBuyPowerInfoRequestCmd Vec::new();

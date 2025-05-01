@@ -1,6 +1,9 @@
 pub mod common;
 pub mod currency;
 pub mod guide;
+pub mod hero;
+pub mod hero_group;
+pub mod item;
 pub mod login;
 pub mod player;
 pub mod stat;

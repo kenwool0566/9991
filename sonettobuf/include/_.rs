@@ -2659,6 +2659,19 @@ pub struct GetItemListReply {
     pub items: ::prost::alloc::vec::Vec<Item>,
     #[prost(message, repeated, tag = "2")]
     pub power_items: ::prost::alloc::vec::Vec<PowerItem>,
+    #[prost(message, repeated, tag = "3")]
+    pub insight_items: ::prost::alloc::vec::Vec<InsightItem>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InsightItem {
+    #[prost(int64, optional, tag = "1")]
+    pub uid: ::core::option::Option<i64>,
+    #[prost(int32, optional, tag = "2")]
+    pub item_id: ::core::option::Option<i32>,
+    #[prost(int32, optional, tag = "3")]
+    pub quantity: ::core::option::Option<i32>,
+    #[prost(int32, optional, tag = "4")]
+    pub expire_time: ::core::option::Option<i32>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct UsePowerItemRequest {
@@ -4009,6 +4022,22 @@ pub struct MinorLimitLoginTimePush {
     pub limit_login_time: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(bool, optional, tag = "2")]
     pub is_login: ::core::option::Option<bool>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetHeroGroupCommonListReply {
+    #[prost(message, repeated, tag = "1")]
+    pub hero_group_commons: ::prost::alloc::vec::Vec<HeroGroupInfo>,
+    #[prost(message, repeated, tag = "2")]
+    pub hero_gourp_types: ::prost::alloc::vec::Vec<HeroGourpType>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HeroGourpType {
+    #[prost(int32, optional, tag = "1")]
+    pub id: ::core::option::Option<i32>,
+    #[prost(int32, optional, tag = "2")]
+    pub current_select: ::core::option::Option<i32>,
+    #[prost(message, optional, tag = "3")]
+    pub group_info: ::core::option::Option<HeroGroupInfo>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]

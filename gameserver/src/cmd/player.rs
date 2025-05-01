@@ -79,7 +79,7 @@ pub async fn on_get_player_info(
         GetStoryRequestCmd Vec::new();
         GetChargeInfoRequestCmd Vec::new();
         GetMonthCardInfoRequestCmd Vec::new();
-        // Skipping GetBlockPackageInfoRequsetCmd (not in proto)
+        GetBlockPackageInfoRequsetCmd Vec::new();
         GetBuildingInfoRequestCmd Vec::new();
         GetCharacterInteractionInfoRequestCmd Vec::new();
         GetSummonInfoRequestCmd Vec::new();

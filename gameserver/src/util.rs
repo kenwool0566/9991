@@ -1,4 +1,4 @@
-use crate::DynError;
+use crate::error::AppError;
 use crate::packet::ServerPacket;
 use sonettobuf::{CmdId, prost::Message};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -20,7 +20,7 @@ pub async fn send_raw_buffer(
     cmd_id: CmdId,
     data: Vec<u8>,
     result_code: i16,
-) -> Result<(), DynError> {
+) -> Result<(), AppError> {
     tracing::info!("Sending Cmd: {:?}", cmd_id);
     let cmd_id = cmd_id as i16;
     let server_packet = ServerPacket {
@@ -39,7 +39,7 @@ pub async fn send_message<T: Message + Default>(
     cmd_id: CmdId,
     data: T,
     result_code: i16,
-) -> Result<(), DynError> {
+) -> Result<(), AppError> {
     let data = data.encode_to_vec();
     send_raw_buffer(socket, cmd_id, data, result_code).await?;
     Ok(())

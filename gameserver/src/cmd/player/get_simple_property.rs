@@ -1,4 +1,4 @@
-use crate::DynError;
+use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
 use sonettobuf::{CmdId, GetSimplePropertyReply};
@@ -9,7 +9,7 @@ pub async fn on_get_simple_property(
     cmd_id: CmdId,
     socket: &mut TcpStream,
     _req: ClientPacket,
-) -> Result<(), DynError> {
+) -> Result<(), AppError> {
     let data = GetSimplePropertyReply {
         simple_properties: Vec::new(),
     };

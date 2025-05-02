@@ -1,4 +1,4 @@
-use crate::DynError;
+use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
 use sonettobuf::{CmdId, HeroInfoListReply};
@@ -9,7 +9,7 @@ pub async fn on_hero_info_list(
     cmd_id: CmdId,
     socket: &mut TcpStream,
     _req: ClientPacket,
-) -> Result<(), DynError> {
+) -> Result<(), AppError> {
     let data = HeroInfoListReply {
         heros: Vec::new(),
         touch_count_left: None,

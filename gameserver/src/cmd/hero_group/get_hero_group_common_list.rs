@@ -1,4 +1,4 @@
-use crate::DynError;
+use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
 use sonettobuf::{CmdId, GetHeroGroupCommonListReply};
@@ -9,7 +9,7 @@ pub async fn on_get_hero_group_common_list(
     cmd_id: CmdId,
     socket: &mut TcpStream,
     _req: ClientPacket,
-) -> Result<(), DynError> {
+) -> Result<(), AppError> {
     let data = GetHeroGroupCommonListReply {
         hero_group_commons: Vec::new(),
         hero_gourp_types: Vec::new(),

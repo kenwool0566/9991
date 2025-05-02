@@ -1,4 +1,4 @@
-use crate::DynError;
+use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::{DAY_MS, send_message, time_ms_u64};
 use sonettobuf::{CmdId, Currency, GetCurrencyListReply, GetCurrencyListRequest};
@@ -8,8 +8,8 @@ pub async fn on_get_currency_list(
     cmd_id: CmdId,
     socket: &mut TcpStream,
     req: ClientPacket,
-) -> Result<(), DynError> {
-    let req = req.decode_message::<GetCurrencyListRequest>();
+) -> Result<(), AppError> {
+    let req = req.decode_message::<GetCurrencyListRequest>()?;
     let cur_time = time_ms_u64();
     let currency_list = req
         .currency_ids

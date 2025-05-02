@@ -1,16 +1,14 @@
-use crate::DynError;
 use crate::cmd::*;
+use crate::error::{AppError, CmdError};
 use crate::packet::ClientPacket;
 use sonettobuf::CmdId;
 use tokio::net::TcpStream;
 
-pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), DynError> {
+pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), AppError> {
     let req = ClientPacket::decode(req)?;
 
-    let cmd_id = match TryInto::<CmdId>::try_into(req.cmd_id as i32) {
-        Ok(v) => v,
-        Err(_) => return Err(format!("Unregistered Cmd: {}", req.cmd_id).into()),
-    };
+    let cmd_id = TryInto::<CmdId>::try_into(req.cmd_id as i32)
+        .map_err(|_| AppError::Cmd(CmdError::UnregisteredCmd(req.cmd_id)))?;
 
     tracing::info!("Received Cmd: {:?}", cmd_id);
 
@@ -54,7 +52,7 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
             stat::on_client_stat_base_info(CmdId::ClientStatBaseInfoRequestCmd, socket, req).await?
         }
 
-        v => return Err(format!("Unhandled Cmd: {:?}", v).into()),
+        v => return Err(AppError::Cmd(CmdError::UnhandledCmd(v))),
     };
 
     Ok(())

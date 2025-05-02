@@ -5,11 +5,10 @@ use tokio::io::AsyncReadExt;
 use tokio::net::TcpListener;
 
 mod cmd;
+mod error;
 mod handler;
 mod packet;
 mod util;
-
-type DynError = Box<dyn std::error::Error + Send + Sync>;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
@@ -51,7 +50,7 @@ async fn main() {
                             if let Err(e) =
                                 handler::dispatch_command(&mut socket, &buffer[..]).await
                             {
-                                tracing::error!("Dispatch Command Error: {}", e);
+                                tracing::error!("{e}");
                             }
                         }
                     }

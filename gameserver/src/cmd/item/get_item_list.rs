@@ -1,4 +1,4 @@
-use crate::DynError;
+use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
 use sonettobuf::{CmdId, GetItemListReply};
@@ -9,7 +9,7 @@ pub async fn on_get_item_list(
     cmd_id: CmdId,
     socket: &mut TcpStream,
     _req: ClientPacket,
-) -> Result<(), DynError> {
+) -> Result<(), AppError> {
     let data = GetItemListReply {
         items: Vec::new(),
         power_items: Vec::new(),

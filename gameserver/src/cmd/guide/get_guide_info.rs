@@ -1,4 +1,4 @@
-use crate::DynError;
+use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
 use sonettobuf::{CmdId, GetGuideInfoReply};
@@ -8,7 +8,7 @@ pub async fn on_get_guide_info(
     cmd_id: CmdId,
     socket: &mut TcpStream,
     _req: ClientPacket,
-) -> Result<(), DynError> {
+) -> Result<(), AppError> {
     let data = GetGuideInfoReply {
         guide_infos: Vec::new(),
     };

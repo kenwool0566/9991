@@ -11,6 +11,7 @@ repository = "https://github.com/NTavern/sonetto-server"
 
 [workspace.dependencies]
 common = { path = "common/" }
+thiserror = "2.0.12"
 
 actix-web = { version = "4.10.2", features = ["openssl"] }
 # remove vendored if you already have openssl-dev installed

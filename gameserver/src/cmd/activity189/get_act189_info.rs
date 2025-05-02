@@ -1,18 +1,18 @@
 use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
-use sonettobuf::{CmdId, GetCharacterInteractionInfoReply};
-// use sonettobuf::CharacterInteractionInfo;
+use sonettobuf::{CmdId, GetAct189InfoReply};
+// use sonettobuf::GetAct189InfoRequest;
 use tokio::net::TcpStream;
 
-pub async fn on_get_character_interaction_info(
+pub async fn on_get_act189_info(
     cmd_id: CmdId,
     socket: &mut TcpStream,
     _req: ClientPacket,
 ) -> Result<(), AppError> {
-    let data = GetCharacterInteractionInfoReply {
-        infos: Vec::new(),
-        interaction_count: None,
+    let data = GetAct189InfoReply {
+        activity_id: None,
+        has_get_once_bonus: None,
     };
 
     send_message(socket, cmd_id, data, 0).await?;

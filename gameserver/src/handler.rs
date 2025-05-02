@@ -29,9 +29,9 @@ pub async fn dispatch_command(socket: &mut TcpStream, req: &[u8]) -> Result<(), 
         }
 
         // ===== login =====
-        CmdId::LoginRequestCmd => login::on_login(CmdId::LoginRequestCmd, socket, req).await?,
+        CmdId::LoginRequestCmd => system::on_login(CmdId::LoginRequestCmd, socket, req).await?,
         CmdId::ReconnectRequestCmd => {
-            login::on_reconnect(CmdId::ReconnectRequestCmd, socket, req).await?
+            system::on_reconnect(CmdId::ReconnectRequestCmd, socket, req).await?
         }
 
         // ===== player =====

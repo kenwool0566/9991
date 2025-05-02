@@ -12,10 +12,10 @@ pub enum AppError {
 
     #[error("Command error: {0}")]
     Cmd(#[from] CmdError),
-
-    #[error("Custom error: {0}")]
-    Custom(&'static str),
 }
+// #[error("Custom error: {0}")]
+// Custom(&'static str),
+// }
 
 #[derive(Debug, Error)]
 pub enum PacketError {

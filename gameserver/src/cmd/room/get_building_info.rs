@@ -2,7 +2,7 @@ use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
 use sonettobuf::{CmdId, GetBuildingInfoReply};
-// use sonettobuff::BuildingInfo;
+// use sonettobuf::BuildingInfo;
 use tokio::net::TcpStream;
 
 pub async fn on_get_building_info(

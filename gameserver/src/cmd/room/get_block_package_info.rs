@@ -2,7 +2,7 @@ use crate::error::AppError;
 use crate::packet::ClientPacket;
 use crate::util::send_message;
 use sonettobuf::{CmdId, GetBlockPackageInfoReply};
-// use sonettobuff::SpecialBlockInfo;
+// use sonettobuf::SpecialBlockInfo;
 use tokio::net::TcpStream;
 
 pub async fn on_get_block_package_info(

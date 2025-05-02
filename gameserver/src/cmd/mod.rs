@@ -1,9 +1,15 @@
+pub mod charge;
 pub mod common;
 pub mod currency;
+pub mod dungeon;
+pub mod equip;
+pub mod fight;
 pub mod guide;
 pub mod hero;
 pub mod hero_group;
 pub mod item;
 pub mod login;
 pub mod player;
+pub mod room;
 pub mod stat;
+pub mod story;

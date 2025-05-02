@@ -68,8 +68,6 @@ pub async fn on_get_player_info(
     send_message(socket, cmd_id, data, 0).await?;
 
     // todo: make handlers for these!
-    // also update protos... FUCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk
-    // anyways do update protos before continuing!!
     multi_send_test![
         socket;
         // GetSimplePropertyRequestCmd Vec::new();
@@ -78,15 +76,15 @@ pub async fn on_get_player_info(
         // GetHeroGroupCommonListRequestCmd Vec::new();
         // GetHeroGroupListRequestCmd Vec::new();
         // GetItemListRequestCmd Vec::new();
-        GetDungeonRequestCmd Vec::new();
-        ReconnectFightRequestCmd Vec::new();
-        GetBuyPowerInfoRequestCmd Vec::new();
-        GetEquipInfoRequestCmd Vec::new();
-        GetStoryRequestCmd Vec::new();
-        GetChargeInfoRequestCmd Vec::new();
-        GetMonthCardInfoRequestCmd Vec::new();
-        GetBlockPackageInfoRequsetCmd Vec::new();
-        GetBuildingInfoRequestCmd Vec::new();
+        // GetDungeonRequestCmd Vec::new();
+        // ReconnectFightRequestCmd Vec::new();
+        // GetBuyPowerInfoRequestCmd Vec::new();
+        // GetEquipInfoRequestCmd Vec::new();
+        // GetStoryRequestCmd Vec::new();
+        // GetChargeInfoRequestCmd Vec::new();
+        // GetMonthCardInfoRequestCmd Vec::new();
+        // GetBlockPackageInfoRequsetCmd Vec::new();
+        // GetBuildingInfoRequestCmd Vec::new();
         GetCharacterInteractionInfoRequestCmd Vec::new();
         GetSummonInfoRequestCmd Vec::new();
         GetAchievementInfoRequestCmd Vec::new();

@@ -7,9 +7,14 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-actix-web.workspace = true
+axum.workspace = true
+axum-server.workspace = true
+common.workspace = true
 flate2.workspace = true
 openssl.workspace = true
+paste.workspace = true
+reqwest.workspace = true
+serde.workspace = true
 serde_json.workspace = true
-common.workspace = true
+tokio.workspace = true
 tracing.workspace = true

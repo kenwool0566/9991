@@ -1,6 +1,5 @@
 /target
-*.crt
-*.key
+/cert
 *.proto
 Cargo.lock
 /backup

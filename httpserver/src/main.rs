@@ -1,50 +1,50 @@
-use actix_web::{App, HttpServer, middleware::from_fn};
-use common::{CERT_FILE_PATH, HOST, HTTPSERVER_PORT, KEY_FILE_PATH, init_tracing};
-use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+use common::{HOST, HTTPSERVER_PORT, init_tracing};
+use reqwest::Client;
+use std::net::SocketAddr;
 
-mod crypto;
+mod cert_utils;
+mod handlers;
 mod middleware;
+mod models;
 
-mod account_handler;
-mod game_handler;
-mod index_handler;
+use cert_utils::{check_cert_exists, get_openssl_config};
+use middleware::crypto::sdk_encryption;
+use middleware::logging::full_logger;
 
-#[actix_web::main]
+#[derive(Clone)]
+struct AppState {
+    http_client: Client,
+}
+
+#[tokio::main]
 async fn main() {
-    let mut ssl = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
-    ssl.set_private_key_file(KEY_FILE_PATH, SslFiletype::PEM)
-        .unwrap();
-    ssl.set_certificate_chain_file(CERT_FILE_PATH).unwrap();
-
-    let addr = format!("{}:{}", HOST, HTTPSERVER_PORT);
     init_tracing();
+    check_cert_exists();
 
-    HttpServer::new(|| {
-        App::new()
-            .wrap(from_fn(middleware::logger))
-            .service(account_handler::sdk_init)
-            .service(account_handler::login_autologin)
-            .service(account_handler::login_mail)
-            .service(account_handler::login_config)
-            .service(account_handler::uid_account_bind_list)
-            .service(account_handler::login_verify)
-            .service(account_handler::login_jsp)
-            .service(account_handler::loadzone_jsp)
-            .service(account_handler::startgame_jsp)
-            .service(game_handler::patch_version)
-            .service(game_handler::get_config)
-            .service(game_handler::post_session)
-            .service(game_handler::post_connect_test)
-            .service(game_handler::post_receive_app)
-            .service(game_handler::get_resource_check)
-            .service(game_handler::get_notice)
-            .service(index_handler::home)
-            .service(index_handler::favicon)
-    })
-    .workers(1)
-    .bind_openssl(&addr, ssl)
-    .unwrap()
-    .run()
-    .await
-    .unwrap();
+    let addr: SocketAddr = format!("{}:{}", HOST, HTTPSERVER_PORT).parse().unwrap();
+
+    let state = AppState {
+        http_client: Client::new(),
+    };
+
+    let with_encryption = {
+        handlers::router::account_router()
+            .layer(axum::middleware::from_fn(full_logger))
+            .layer(axum::middleware::from_fn(sdk_encryption))
+    };
+
+    let without_encryption = {
+        handlers::router::game_router()
+            .merge(handlers::router::jsp_router())
+            .merge(handlers::router::index_router())
+            .layer(axum::middleware::from_fn(full_logger))
+    };
+
+    let app = with_encryption.merge(without_encryption).with_state(state);
+
+    tracing::info!("Listening on https://{}", addr);
+    axum_server::bind_openssl(addr, get_openssl_config())
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }

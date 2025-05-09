@@ -49,7 +49,7 @@ impl ClientPacket {
             )));
         }
 
-        let packet_size = BE::read_u32(&buffer[0..4]) as usize;
+        let packet_size = BE::read_i32(&buffer[0..4]) as usize;
 
         if buffer.len() != packet_size + 4 {
             return Err(AppError::Packet(PacketError::LengthMismatch(

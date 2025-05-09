@@ -61,7 +61,6 @@ pub async fn sdk_encryption(req: Request<Body>, next: Next) -> Response<Body> {
             .unwrap();
     }
 
-    // Now it's safe to mutate or process decompressed
     swap_each_two_bytes(&mut decompressed);
 
     let req = Request::builder()

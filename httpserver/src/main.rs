@@ -2,12 +2,10 @@ use common::{HOST, HTTPSERVER_PORT, init_tracing};
 use reqwest::Client;
 use std::net::SocketAddr;
 
-mod cert_utils;
 mod handlers;
 mod middleware;
 mod models;
 
-use cert_utils::{check_cert_exists, get_openssl_config};
 use middleware::crypto::sdk_encryption;
 use middleware::logging::full_logger;
 
@@ -19,7 +17,6 @@ struct AppState {
 #[tokio::main]
 async fn main() {
     init_tracing();
-    check_cert_exists();
 
     let addr: SocketAddr = format!("{}:{}", HOST, HTTPSERVER_PORT).parse().unwrap();
 
@@ -42,8 +39,8 @@ async fn main() {
 
     let app = with_encryption.merge(without_encryption).with_state(state);
 
-    tracing::info!("Listening on https://{}", addr);
-    axum_server::bind_openssl(addr, get_openssl_config())
+    tracing::info!("Listening on http://{}", addr);
+    axum_server::bind(addr)
         .serve(app.into_make_service())
         .await
         .unwrap();

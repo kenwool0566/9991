@@ -5,6 +5,7 @@ use tokio::io::AsyncReadExt;
 use tokio::net::TcpListener;
 
 mod cmd;
+mod bin_packet;
 mod error;
 mod handler;
 mod packet;
